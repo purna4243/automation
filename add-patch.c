@@ -378,11 +378,6 @@ static int parse_hunk_header(struct add_p_state *s, struct hunk *hunk)
 	return 0;
 }
 
-static inline int user_meant_head(const char *rev)
-{
-	return !strcmp(rev, "HEAD") || !strcmp(rev, "@");
-}
-
 static int is_octal(const char *p, size_t len)
 {
 	if (!len)
@@ -1734,21 +1729,21 @@ int run_add_p(struct repository *r, enum add_p_mode mode,
 	if (mode == ADD_P_STASH)
 		s.mode = &patch_mode_stash;
 	else if (mode == ADD_P_RESET) {
-		if (!revision || user_meant_head(revision))
+		if (!revision || the_user_meant_head(revision))
 			s.mode = &patch_mode_reset_head;
 		else
 			s.mode = &patch_mode_reset_nothead;
 	} else if (mode == ADD_P_CHECKOUT) {
 		if (!revision)
 			s.mode = &patch_mode_checkout_index;
-		else if (user_meant_head(revision))
+		else if (the_user_meant_head(revision))
 			s.mode = &patch_mode_checkout_head;
 		else
 			s.mode = &patch_mode_checkout_nothead;
 	} else if (mode == ADD_P_WORKTREE) {
 		if (!revision)
 			s.mode = &patch_mode_checkout_index;
-		else if (user_meant_head(revision))
+		else if (the_user_meant_head(revision))
 			s.mode = &patch_mode_worktree_head;
 		else
 			s.mode = &patch_mode_worktree_nothead;

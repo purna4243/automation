@@ -38,4 +38,18 @@ enum add_p_mode {
 int run_add_p(struct repository *r, enum add_p_mode mode,
 	      const char *revision, const struct pathspec *ps);
 
+/*
+ * When the user gives these tokens from the command line, they mean
+ * the state that the currently checked out state came from.  This
+ * single bit of information affects the direction in which the patch
+ * is presented to the end-user: are we showing a patch to go back to
+ * the currently committed state, or are we showing a patch to move
+ * forward to the given commit that may be different from the
+ * committed state we started with?
+ */
+static inline int the_user_meant_head(const char *rev)
+{
+	return !strcmp(rev, "HEAD") || !strcmp(rev, "@");
+}
+
 #endif

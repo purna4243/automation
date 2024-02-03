@@ -544,8 +544,7 @@ static int checkout_paths(const struct checkout_opts *opts,
 		 * given a tree-object, new_branch_info->commit would be NULL,
 		 * but we do not have to do any replacement, either.
 		 */
-		if (rev && new_branch_info->commit && strcmp(rev, "HEAD") &&
-		    strcmp(rev, "@"))
+		if (rev && new_branch_info->commit && !the_user_meant_head(rev))
 			rev = oid_to_hex_r(rev_oid, &new_branch_info->commit->object.oid);
 
 		if (opts->checkout_index && opts->checkout_worktree)
